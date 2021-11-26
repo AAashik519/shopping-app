@@ -5,28 +5,31 @@ import { createOrder } from "../actions/orderAction";
 import { useDispatch, useSelector } from "react-redux";
 import CheckOut from "../components/CheckOut";
 import { Button, Card, Col, Image, ListGroup, Row } from "react-bootstrap";
-const PlaceOrderScreen = ({history}) => {
+
+const PlaceOrderScreen = ({history} ) => {
   const cart = useSelector((state) => state.cart);
+  console.log(cart)
   const dispatch = useDispatch();
   const orderCreate = useSelector((state) => state.orderCreate);
   const {  order, success, error } = orderCreate;
+
   const addDecimal =(num)=>{
     return(Math.round(num*1).toFixed(2))
   }
   const placeOrderHandler=()=>{
-    dispatch(
-      createOrder({
-        orderItems: cart.cartItems,
-         shippingAddress: cart.shippingAddress,
-        paymentMethod : cart.paymentMethod,
-        itemPrice: cart.itemPrice,
-        shippingPrice : cart.shippingPrice,
-        taxPrice : cart.taxPrice,
-        totalPrice : cart.totalPrice
+    // dispatch(
+    //   createOrder({
+    //     orderItems: cart.cartItems,
+    //      shippingAddress: cart.shippingAddress,
+    //     paymentMethod : cart.paymentMethod,
+    //     itemPrice: cart.itemPrice,
+    //     shippingPrice : cart.shippingPrice,
+    //     taxPrice : cart.taxPrice,
+    //     totalPrice : cart.totalPrice
 
 
-      })
-    )
+    //   })
+    // )
   }
 
     useEffect(()=>{
@@ -45,34 +48,28 @@ const PlaceOrderScreen = ({history}) => {
       <CheckOut step1 step2 step3 step4 />
 
       <Row>
-        <Col md={8}>
+      <Col md={8}>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>Shipping </h2>
+              <h2>Shipping</h2>
               <p>
-                
-                <strong> Address:</strong>
-                {cart.shippingAddress.address} ,{cart.shippingAddress.city} ,
-                {cart.shippingAddress.postalCode} ,
-                {cart.shippingAddress.country} ,
+                <strong>Address :</strong>
+                {cart.shippingAddress.address}&nbsp;
+                {cart.shippingAddress.city}&nbsp;
+                {cart.shippingAddress.postalcode}&nbsp;
+                {cart.shippingAddress.country}&nbsp;
               </p>
             </ListGroup.Item>
-          </ListGroup>
-          <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>Payment Method </h2>
+              <h2>Payment Method</h2>
               <p>
-                <strong>Payment Method : </strong>
-                {cart.paymentMethod}
+                <strong>{cart.paymentMethod}</strong>
               </p>
             </ListGroup.Item>
-          </ListGroup>
-
-          <ListGroup variant="flush">
             <ListGroup.Item>
               <h2>Order Items</h2>
               {cart.cartItems.length === 0 ? (
-                <Message> Your cart is empty </Message>
+                <Message>Your Cart is Empty</Message>
               ) : (
                 <ListGroup variant="flush">
                   {cart.cartItems.map((item, index) => (
@@ -83,13 +80,11 @@ const PlaceOrderScreen = ({history}) => {
                         </Col>
                         <Col>
                           <Link to={`/product/${item.product}`}>
-                            {" "}
-                            {item.name}{" "}
+                            {item.name}
                           </Link>
                         </Col>
-
                         <Col md={4}>
-                          {item.qty} X $ {item.price} =$ {item.price * item.qty}
+                          {item.qty} X ${item.price} = ${item.price}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -132,6 +127,10 @@ const PlaceOrderScreen = ({history}) => {
                     <ListGroup.Item> 
                       {error &&  <Message variant='danger'>{error} </Message> }
                      </ListGroup.Item>
+                     <ListGroup.Item>
+                       {error && <Message variant='danger' >{error} </Message> }
+                     </ListGroup.Item>
+
               <Button type='button' className='btn-block' disabled={cart.cartItems === 0} onClick={placeOrderHandler}>   Place Order </Button>
             </ListGroup>
           </Card>
